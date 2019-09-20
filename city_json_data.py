@@ -21,7 +21,7 @@ class CityJsonData(BaseData):
         print('Loaded: ' + self._filename)
         print('City has ' + str(len(mainCity.j['CityObjects'].keys())) + ' objects.')
 
-        tempLoopCounter = 0
+        # tempLoopCounter = 0
 
         for id in mainCity.j['CityObjects'].keys():
             sCity = mainCity.get_subset_ids([id], exclude=False)
@@ -33,9 +33,9 @@ class CityJsonData(BaseData):
             new_meta_data = new_data_obj.meta_data()
             new_meta_data["id"] = id
             new_meta_data["BBox"] = str(sCity.get_bbox())
-            print(new_meta_data)
+            # print(new_meta_data)
 
-            if tempLoopCounter >= 5:
-                break
-            else: 
-                tempLoopCounter+=1            
+            # if tempLoopCounter >= 5:
+            #     break
+            # else: 
+            #     tempLoopCounter+=1            

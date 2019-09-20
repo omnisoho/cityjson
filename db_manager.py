@@ -16,10 +16,10 @@ class DynamodbManager(object):
 
         for key, value in dataDict.items():
             data_obj = value
-            print(key)
-            print(data_obj.key_id())
-            print(data_obj.meta_data())
-            print(data_obj.compressed_data())
+            # print(key)
+            # print(data_obj.key_id())
+            # print(data_obj.meta_data())
+            # print(data_obj.compressed_data())
             uploadDataDict = {
                 'part_id': str(data_obj.key_id()),
                 'blob': data_obj.compressed_data(),

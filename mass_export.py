@@ -12,7 +12,7 @@ def main():
     city_json_processer.preprocess()
 
     data_dict = city_json_processer.get_data_dictionary()
-    print (data_dict)
+    # print (data_dict)
 
     data_manager = DynamodbManager(table_name)
     data_manager.upload_list(data_dict, city_json_processer.lod())
