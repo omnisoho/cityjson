@@ -15,13 +15,13 @@ class CityJsonData(BaseData):
     def lod(self):
         return self._lod
 
-    def preprocess(self):        
+    def preprocess(self, is_test_run):        
         cityFp = open(self._filename)
         mainCity = cityjson.CityJSON(file=cityFp, ignore_duplicate_keys=False)
         print('Loaded: ' + self._filename)
         print('City has ' + str(len(mainCity.j['CityObjects'].keys())) + ' objects.')
 
-        # tempLoopCounter = 0
+        tempLoopCounter = 0
 
         for id in mainCity.j['CityObjects'].keys():
             sCity = mainCity.get_subset_ids([id], exclude=False)
@@ -35,7 +35,8 @@ class CityJsonData(BaseData):
             new_meta_data["BBox"] = str(sCity.get_bbox())
             # print(new_meta_data)
 
-            # if tempLoopCounter >= 5:
-            #     break
-            # else: 
-            #     tempLoopCounter+=1            
+            if is_test_run:
+                if tempLoopCounter >= 5:
+                    break
+                else: 
+                    tempLoopCounter+=1            
