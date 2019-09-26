@@ -18,12 +18,18 @@ class DatabaseManager(ABC):
 
 class DynamodbManager(DatabaseManager):
 
-    def __init__(self, tableName):
+    def __init__(self, tableName, bucket, filepath):
         # db connection
         dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION, 
         aws_access_key_id=ACCESS_ID, 
         aws_secret_access_key= AWS_SECRET_KEY)
         self._table = dynamodb.Table(tableName)
+
+        self.s3 = boto3.resource('s3', region_name=AWS_REGION, 
+        aws_access_key_id=ACCESS_ID, 
+        aws_secret_access_key= AWS_SECRET_KEY)
+        self.bucket = bucket
+        self.filepath = filepath
 
     def upload_items(self, dataDict, lod):
 
@@ -33,8 +39,15 @@ class DynamodbManager(DatabaseManager):
             # print(data_obj.key_id())
             # print(data_obj.meta_data())
             # print(data_obj.compressed_data())
+
+            part_id = str(data_obj.key_id())
+            s3.upload_file(
+                part_id, self.bucket, self.filepath,
+                ExtraArgs={'ACL': 'public-read'}
+            )
+
             uploadDataDict = {
-                'part_id': str(data_obj.key_id()),
+                'part_id': part_id,
                 'blob': data_obj.compressed_data(),
                 'meta': data_obj.meta_data(),
                 'lod': lod,

@@ -16,8 +16,8 @@ def main():
     data_dict = city_json_processer.get_data_dictionary()
     # print (data_dict)
 
-    # data_manager = DynamodbManager(test_table_name)
-    data_manager = MongodbManager(test_table_name)
+    data_manager = DynamodbManager(test_table_name)
+    # data_manager = MongodbManager(test_table_name)
     print('data_manager instantiated')
     data_manager.upload_items(data_dict, city_json_processer.lod()) 
     print('data_manager uploaded')
