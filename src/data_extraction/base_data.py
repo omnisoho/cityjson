@@ -1,10 +1,12 @@
 import os
 import sys
 import zstd
+from src.utils import replace_special_chars
 
 class DataObject(object):
     def __init__(self, key_id, data_in, compression_level=1):
         self._key_id = key_id
+        self._formatted_key_id = str(replace_special_chars(self._key_id, '_'))
         self._data = data_in
         self._compressed_data = None
         self._compression_level = compression_level
@@ -13,12 +15,15 @@ class DataObject(object):
     def key_id(self):
         return self._key_id
 
+    def formatted_key_id(self):
+        return self._formatted_key_id        
+
     def meta_data(self):
         return self._metaData
 
     def data(self):
         return self._data
-    
+
     def set_data(self, data_in):
         self._data = data_in
         self._compressed_data = None
@@ -40,6 +45,9 @@ class BaseData(object):
 
     def get_data_dictionary(self):
         return self._data_dict
+
+    def get_obj_type(self):
+        return self._obj_type
 
     def preprocess(self):
         '''Override this method to transform the input data into something that actually gets stored'''

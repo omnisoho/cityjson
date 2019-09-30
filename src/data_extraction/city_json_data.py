@@ -1,5 +1,5 @@
 from cjio import cityjson
-from base_data import BaseData
+from .base_data import BaseData
 
 class CityJsonData(BaseData):
     # def __init__(self, objType, keyID, dataIn, lodIn, filenameIn):
