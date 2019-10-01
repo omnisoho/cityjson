@@ -10,7 +10,8 @@ def main():
     local_filename = './hdb.json'
     is_test_run = True
     
-    s3_bucket = 'prj-ss-raw-data'
+    # s3_bucket = 'prj-ss-raw-data'
+    s3_bucket = 'gisgeometry.raw.data'
     s3_file_path = 'hdb_cityjson/exported_objs/'
 
     city_json_processer = CityJsonData(obj_type_str, default_lod, local_filename)

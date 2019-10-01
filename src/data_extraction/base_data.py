@@ -4,7 +4,7 @@ import zstd
 from src.utils import replace_special_chars
 
 class DataObject(object):
-    def __init__(self, key_id, data_in, compression_level=1):
+    def __init__(self, key_id, data_in, compression_level=14):
         self._key_id = key_id
         self._formatted_key_id = str(replace_special_chars(self._key_id, '_'))
         self._data = data_in
@@ -35,7 +35,7 @@ class DataObject(object):
         return self._compressed_data
 
 class BaseData(object):
-    def __init__(self, obj_type, compression_level=1):
+    def __init__(self, obj_type, compression_level=14):
         self._obj_type = obj_type
         self._data_dict = {}
 

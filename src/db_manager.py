@@ -57,7 +57,7 @@ class DynamodbManager(DatabaseManager):
             key_path = self._filepath + part_id
             self._s3.put_object(
                 Body=blob, Bucket=self._bucket, Key=key_path, 
-                ACL='public-read'
+                # ACL='public-read'
             )
 
             uploadDataDict = {

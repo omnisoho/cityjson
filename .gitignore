@@ -3,5 +3,6 @@ credentials_config.py
 hdb.json
 /Export/
 /.vscode
+/test_scripts
 *.pyc
 *.zip
