@@ -19,12 +19,14 @@ class DynamodbManager(DatabaseManager):
     PARTITION_ID = 'partition_id'
     LOD = 'lod'
     OBJECT_TYPE = 'file_type'
-    BLOB_BUCKET = 'blob_bucket'
-    BLOB_KEY = 'blob_key'
+    MESH_BUCKET = 'mesh_bucket'
+    MESH_KEY = 'mesh_key'
+    RAW_BUCKET = 'raw_bucket'
+    RAW_KEY = 'raw_key'
     META = 'meta'
     LAST_UPDATED_DATETIME = 'last_updated_datetime'
 
-    def __init__(self, table_name, bucket, filepath):
+    def __init__(self, table_name, bucket, raw_filepath, mesh_filepath=None):
         # db connection
         # dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION, 
         # aws_access_key_id=ACCESS_ID, 
@@ -41,7 +43,8 @@ class DynamodbManager(DatabaseManager):
 
         self._s3 = access_manager.s3_client_instance()
         self._bucket = bucket
-        self._filepath = filepath
+        self._raw_filepath = raw_filepath
+        self._mesh_filepath = mesh_filepath
 
     def upload_items(self, dataDict, object_type, lod):
 
@@ -53,20 +56,29 @@ class DynamodbManager(DatabaseManager):
             # print(data_obj.compressed_data())
 
             part_id = data_obj.formatted_key_id()
-            blob = data_obj.compressed_data()
-            key_path = self._filepath + part_id
+            mesh = data_obj.compressed_mesh()
+            mesh_key_path = self._mesh_filepath + part_id
             self._s3.put_object(
-                Body=blob, Bucket=self._bucket, Key=key_path, 
+                Body=mesh, Bucket=self._bucket, Key=mesh_key_path, 
                 # ACL='public-read'
             )
+
+            raw_data = data_obj.compressed_data()
+            raw_key_path = self._raw_filepath + part_id
+            self._s3.put_object(
+                Body=raw_data, Bucket=self._bucket, Key=raw_key_path, 
+                # ACL='public-read'
+            )                        
 
             uploadDataDict = {
                 DynamodbManager.PARTITION_ID: part_id,
                 DynamodbManager.LOD: lod,
                 DynamodbManager.OBJECT_TYPE: object_type,
-                DynamodbManager.BLOB_BUCKET: self._bucket,
-                DynamodbManager.BLOB_KEY: key_path,
+                DynamodbManager.MESH_BUCKET: self._bucket,
+                DynamodbManager.MESH_KEY: mesh_key_path,
                 DynamodbManager.META: data_obj.meta_data(),
+                DynamodbManager.RAW_BUCKET: self._bucket,
+                DynamodbManager.RAW_KEY: raw_key_path
             }
             self.upload_item(uploadDataDict)
 

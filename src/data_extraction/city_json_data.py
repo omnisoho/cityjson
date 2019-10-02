@@ -1,5 +1,6 @@
 from cjio import cityjson
 from .base_data import BaseData
+import json
 
 class CityJsonData(BaseData):
     # def __init__(self, objType, keyID, dataIn, lodIn, filenameIn):
@@ -26,8 +27,10 @@ class CityJsonData(BaseData):
         for id in mainCity.j['CityObjects'].keys():
             sCity = mainCity.get_subset_ids([id], exclude=False)
             print('Got id: ' + id)
+            # print('scity ' + json.dumps(sCity.j))
+            raw_data = sCity.j
             obj_value = sCity.export2obj()
-            new_data_obj = self.add_data_blob(id, bytes(obj_value.getvalue(), 'utf-8'))
+            new_data_obj = self.add_data_blob(id, bytes(json.dumps(raw_data), 'utf-8'), bytes(obj_value.getvalue(), 'utf-8'))
             print('Added new geometry for id: ' + str(id))
 
             new_meta_data = new_data_obj.meta_data()
